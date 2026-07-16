@@ -5,7 +5,7 @@ from .tools import cross_check_citations
 compliance_pod = Agent(
     name="CompliancePod",
     model="gemini-2.0-flash",
-    instructions="""
+    instruction="""
     You are the Compliance & Evidence Pod.
 
     Your job:
