@@ -37,8 +37,8 @@ echo ""
 echo "Press Ctrl+C to stop"
 echo "================================"
 
-# Run the main agent with ADK web interface
-adk web
+# Run the root agent with ADK web interface
+adk web app.py
 
 # Alternative: Python CLI mode
-# python main.py
+# python -c "from agents.root_agent import root_agent; result = root_agent.run('What is our CBP rate?'); print(result.output)"
