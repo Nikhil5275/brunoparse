@@ -140,3 +140,5 @@ reports/*.pdf
 # ========================
 docs/_build/
 site/
+/SETUP_GUIDE.md
+/test_connection.py
