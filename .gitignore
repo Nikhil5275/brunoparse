@@ -1,0 +1,142 @@
+# STARs RAG Agent - .gitignore
+ 
+# ========================
+# Python
+# ========================
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+ 
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+ 
+# Distribution / packaging
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+ 
+# PyInstaller
+*.manifest
+*.spec
+ 
+# Unit test / coverage
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+ 
+# ========================
+# Credentials & Secrets
+# ========================
+.env
+.env.local
+.env.*.local
+*.json
+!config/cms_thresholds.json
+credentials.json
+service-account-key.json
+*-key.json
+ 
+# ========================
+# IDEs & Editors
+# ========================
+# VSCode
+.vscode/
+*.code-workspace
+ 
+# PyCharm
+.idea/
+*.iml
+ 
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+ 
+# Vim
+*.swp
+*.swo
+*~
+ 
+# ========================
+# OS Files
+# ========================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+ 
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+ 
+# Linux
+*~
+ 
+# ========================
+# Google Cloud / ADK
+# ========================
+.adk/
+.gcp/
+*.log
+ 
+# BigQuery temp files
+bq-results-*.json
+query-results/
+ 
+# Vertex AI
+vertex-ai-cache/
+ 
+# ========================
+# Project Specific
+# ========================
+# Temp files
+temp/
+tmp/
+scratch/
+ 
+# Data files (don't commit large datasets)
+data/
+*.csv
+*.parquet
+*.db
+*.sqlite
+ 
+# Output files
+outputs/
+results/
+reports/*.pdf
+ 
+# Keep template files
+!*template*
+!*.example
+ 
+# ========================
+# Documentation builds
+# ========================
+docs/_build/
+site/
