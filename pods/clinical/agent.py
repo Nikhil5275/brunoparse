@@ -5,7 +5,7 @@ from .tools import query_care_gaps
 clinical_pod = Agent(
     name="ClinicalPod",
     model="gemini-2.5-pro",
-    instructions="""
+    instruction="""
     You are the Clinical Operations Pod.
 
     Your job:

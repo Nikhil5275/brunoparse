@@ -6,7 +6,7 @@ from google.adk import Agent
 synthesizer_agent = Agent(
     name="Synthesizer",
     model="gemini-2.5-pro",
-    instructions="""
+    instruction="""
     You are the Synthesizer for the STARs RAG Agent system.
 
     Your job is to merge outputs from multiple pods into ONE coherent, professional response.

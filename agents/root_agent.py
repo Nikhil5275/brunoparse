@@ -182,7 +182,7 @@ def orchestrate_query(user_question: str) -> str:
 root_agent = Agent(
     name="STARsRAGAgent",
     model="gemini-2.5-pro",
-    instructions="""
+    instruction="""
     You are the STARs RAG Agent - an intelligent assistant for Medicare Advantage
     HEDIS/STARs performance analysis.
 

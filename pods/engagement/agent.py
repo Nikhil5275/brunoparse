@@ -5,7 +5,7 @@ from .tools import query_member_segments, search_intervention_history
 engagement_pod = Agent(
     name="EngagementPod",
     model="gemini-2.5-pro",
-    instructions="""
+    instruction="""
     You are the Engagement Intelligence Pod.
 
     Your job:

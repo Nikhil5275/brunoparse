@@ -6,7 +6,7 @@ from google.adk import Agent
 router_agent = Agent(
     name="PodRouter",
     model="gemini-2.0-flash",
-    instructions="""
+    instruction="""
     You are the Pod Router for the STARs RAG Agent system.
 
     Your ONLY job is to analyze the user's query and decide which pod(s) should handle it.
