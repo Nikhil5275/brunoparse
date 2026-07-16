@@ -11,28 +11,30 @@ from pods.engagement.tools import query_member_segments, search_intervention_his
 
 
 def test_query_member_segments():
-    """Test member segmentation queries"""
     print("🧪 Testing query_member_segments...")
 
-    # Test different dimension combinations
     result = query_member_segments(
         measure="CBP",
-        dimensions=["age_group", "geography"],
-        contract="H1234"
+        dimensions=["age_band", "gender"]
     )
+
+    assert result is not None
+    assert len(result) > 0
+
     print(f"✅ Segmentation result: {result}\n")
 
 
 def test_search_intervention_history():
-    """Test intervention history retrieval"""
     print("🧪 Testing search_intervention_history...")
 
     result = search_intervention_history(
         measure="CBP",
         year=2024
     )
-    print(f"✅ Past interventions: {result}\n")
 
+    assert result is not None
+
+    print(f"✅ Past interventions: {result}\n")
 
 if __name__ == "__main__":
     print("=" * 60)

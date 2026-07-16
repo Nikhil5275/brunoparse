@@ -4,59 +4,78 @@ from config.settings import PROJECT_ID, BQ_DATASET
 
 client = bigquery.Client(project=PROJECT_ID)
 
-def query_member_segments(measure: str, dimensions: list, contract: str = "H1234"):
-    """Query member segments with GROUP BY
-
-    Args:
-        measure: Measure code
-        dimensions: List of columns to segment by (e.g., ['age_group', 'geography'])
-        contract: Contract ID
-
-    Returns:
-        List of segment breakdowns
+def query_member_segments(
+    measure: str,
+    dimensions: list,
+    plan_type: str = None
+):
     """
+    Query member segments with GROUP BY.
+    """
+
     dimension_cols = ", ".join(dimensions)
+
+    plan_filter = ""
+    if plan_type:
+        plan_filter = f"AND plan_type = '{plan_type}'"
 
     query = f"""
     SELECT
         {dimension_cols},
-        COUNT(*) as member_count,
-        AVG(compliant) as compliance_rate
+        SUM(members_eligible) AS members_eligible,
+        SUM(members_compliant) AS members_compliant,
+        SAFE_DIVIDE(
+            SUM(members_compliant),
+            SUM(members_eligible)
+        ) * 100 AS compliance_rate_pct
     FROM `{PROJECT_ID}.{BQ_DATASET}.segment_performance`
-    WHERE measure_code = '{measure}'
-      AND contract_id = '{contract}'
+    WHERE measure_id = '{measure}'
+    {plan_filter}
     GROUP BY {dimension_cols}
-    ORDER BY compliance_rate ASC
+    ORDER BY compliance_rate_pct ASC
     LIMIT 10
     """
 
     result = client.query(query).to_dataframe()
-    return result.to_dict('records')
+
+    if result.empty:
+        return {
+            "error": f"No segment data found for measure {measure}"
+        }
+
+    return result.to_dict("records")
 
 
-def search_intervention_history(measure: str, year: int = 2024):
-    """Get past intervention results
-
-    Args:
-        measure: Measure code
-        year: Year to look at
-
-    Returns:
-        List of past interventions
+def search_intervention_history(
+    measure: str,
+    year: int = 2024
+):
     """
+    Return most effective historical interventions.
+    """
+
     query = f"""
     SELECT
-        intervention_name,
-        outcome_delta,
-        population_size,
-        cost_per_member,
-        description
+        intervention_type,
+        primary_channel,
+        members_targeted,
+        members_closed,
+        closure_rate_pct,
+        cost_per_closure_usd,
+        total_cost_est_usd,
+        notes
     FROM `{PROJECT_ID}.{BQ_DATASET}.historical_interventions`
-    WHERE measure_code = '{measure}'
-      AND year = {year}
-    ORDER BY outcome_delta DESC
+    WHERE measure_id = '{measure}'
+      AND intervention_year = {year}
+    ORDER BY closure_rate_pct DESC
     LIMIT 5
     """
 
     result = client.query(query).to_dataframe()
-    return result.to_dict('records')
+
+    if result.empty:
+        return {
+            "error": f"No interventions found for {measure} in {year}"
+        }
+
+    return result.to_dict("records")
