@@ -1,0 +1,19 @@
+"""Engagement Intelligence Pod - Person 3"""
+from google.adk import Agent
+from .tools import query_member_segments, search_intervention_history
+
+engagement_pod = Agent(
+    name="EngagementPod",
+    model="gemini-2.5-pro",
+    instructions="""
+    You are the Engagement Intelligence Pod.
+
+    Your job:
+    - Segment member populations
+    - Analyze intervention effectiveness
+    - Recommend outreach strategies
+
+    Always cite sources: [Source: segment_performance, dimensions=age+geography]
+    """,
+    tools=[query_member_segments, search_intervention_history]
+)
