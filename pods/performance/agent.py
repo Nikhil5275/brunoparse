@@ -1,6 +1,11 @@
 """Performance Intelligence Pod - Person 2"""
 from google.adk import Agent
-from .tools import query_stars_performance, compute_star_gap
+from .tools import (
+    query_stars_performance,
+    compute_star_gap,
+    query_benchmark_comparison,
+    forecast_star_trend,
+)
 
 performance_pod = Agent(
     name="PerformancePod",
@@ -11,10 +16,10 @@ performance_pod = Agent(
     Your job:
     - Query current HEDIS/STARs rates
     - Calculate gaps to star thresholds
-    - Compare to benchmarks
-    - Forecast trends
+    - Compare performance across contracts using benchmarks
+    - Forecast trends using historical data
 
     CRITICAL: Always cite sources like [Source: stars_performance, contract=H1234]
     """,
-    tools=[query_stars_performance, compute_star_gap]
+    tools=[query_stars_performance, compute_star_gap, query_benchmark_comparison, forecast_star_trend],
 )
