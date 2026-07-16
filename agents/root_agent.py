@@ -106,19 +106,74 @@ def orchestrate_query(user_question: str) -> str:
 
     print("✅ Synthesis complete")
 
-    # Step 4: Compliance validation
-    print("🛡️  Validating compliance...")
+    # Step 4: Compliance validation with retry loop
+    print("🛡️  Step 4: Running compliance validation with retry...\n")
 
-    compliance_result = compliance_pod.run(
-        f"Validate this response:\n\n{final_response}"
-    )
+    max_retries = 3
+    compliance_passed = False
 
-    compliance_output = compliance_result.output.lower()
+    for attempt in range(1, max_retries + 1):
+        print(f"   Attempt {attempt}/{max_retries}: Checking compliance...")
 
-    if "approved" not in compliance_output or "false" in compliance_output:
-        final_response = f"⚠️ COMPLIANCE ISSUES:\n{compliance_result.output}\n\n---\n\n{final_response}"
+        compliance_result = compliance_pod.run(
+            f"Validate this response for citations and PII:\n\n{final_response}"
+        )
 
-    print("✅ Compliance check complete\n")
+        compliance_output = compliance_result.output.lower()
+
+        # Check if compliance approved
+        if "approved" in compliance_output and "false" not in compliance_output:
+            compliance_passed = True
+            print(f"   ✅ Compliance PASSED on attempt {attempt}\n")
+            break
+        else:
+            print(f"   ❌ Compliance FAILED on attempt {attempt}")
+            print(f"   Issues: {compliance_result.output}\n")
+
+            # If this isn't the last attempt, try to fix the issues
+            if attempt < max_retries:
+                print(f"   🔧 Asking Synthesizer to fix compliance issues...\n")
+
+                try:
+                    # Ask synthesizer to fix the specific compliance issues
+                    fix_result = synthesizer_agent.run(
+                        f"""Fix these compliance issues in the response below:
+
+    COMPLIANCE ISSUES:
+    {compliance_result.output}
+
+    ORIGINAL RESPONSE:
+    {final_response}
+
+    Instructions:
+    - Add missing citations if needed
+    - Remove any PII (member IDs, names, etc.)
+    - Maintain all factual content
+    - Keep professional formatting
+    """
+                    )
+                    final_response = fix_result.output
+                    print(f"   ✅ Response regenerated\n")
+
+                except Exception as e:
+                    print(f"   ⚠️  Failed to regenerate response: {e}\n")
+                    break  # Can't fix, exit retry loop
+
+    # If compliance never passed after all retries
+    if not compliance_passed:
+        print(f"⚠️  COMPLIANCE FAILED after {max_retries} attempts\n")
+        final_response = f"""⚠️ **COMPLIANCE WARNING**
+
+    This response failed compliance validation after {max_retries} attempts.
+    Issues detected: {compliance_result.output}
+
+    Please review the information below carefully and verify any claims independently.
+
+    ---
+
+    {final_response}"""
+    else:
+        print("✅ Response approved by compliance\n")
 
     return final_response
 
