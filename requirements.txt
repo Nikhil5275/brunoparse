@@ -1,0 +1,23 @@
+# STARs RAG Agent - Team Dependencies
+# Python 3.9+ required
+
+# Core ADK and GCP
+google-adk>=0.1.0
+google-cloud-bigquery>=3.10.0
+google-cloud-aiplatform>=1.38.0
+
+# Additional AI providers (optional)
+anthropic>=0.18.0
+
+# Utilities
+python-dotenv>=1.0.0
+pydantic>=2.0.0
+pandas>=2.0.0
+
+# Development/Testing
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+
+# Optional UI dependencies (only if building Streamlit)
+streamlit>=1.28.0
+plotly>=5.17.0
