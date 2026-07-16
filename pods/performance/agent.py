@@ -7,10 +7,10 @@ from .tools import (
     forecast_star_trend,
 )
 
-performance_pod = Agent(
+root_agent = Agent(
     name="PerformancePod",
-    model="gemini-2.0-flash",
-    instructions="""
+    model="gemini-2.0-flash-001",
+    instruction="""
     You are the Performance Intelligence Pod.
 
     Your job:

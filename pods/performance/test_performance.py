@@ -20,15 +20,15 @@ def test_query_stars_performance():
     result = query_stars_performance(
         measure="CBP",
         contract="H1234",
-        year=2025
+        year=2026
     )
     print(f"✅ Result: {result}\n")
 
     # Test 2: Different measure
     result2 = query_stars_performance(
-        measure="CDC",
+        measure="CDC-H",
         contract="H1234",
-        year=2025
+        year=2026
     )
     print(f"✅ Diabetes result: {result2}\n")
 
@@ -36,7 +36,7 @@ def test_query_stars_performance():
     result3 = query_stars_performance(
         measure="INVALID",
         contract="H1234",
-        year=2025
+        year=2026
     )
     print(f"✅ Error handling: {result3}\n")
 
