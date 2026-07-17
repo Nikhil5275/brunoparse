@@ -1,25 +1,19 @@
 """Performance Intelligence Pod - Person 2"""
 from google.adk import Agent
-from .tools import (
-    query_stars_performance,
-    compute_star_gap,
-    query_benchmark_comparison,
-    forecast_star_trend,
-)
+from .tools import query_stars_performance, compute_star_gap, query_benchmark_comparison, forecast_star_trend
 
-root_agent = Agent(
+performance_pod = Agent(
     name="PerformancePod",
-    model="gemini-2.0-flash-001",
     instruction="""
     You are the Performance Intelligence Pod.
-
+    
     Your job:
     - Query current HEDIS/STARs rates
     - Calculate gaps to star thresholds
-    - Compare performance across contracts using benchmarks
-    - Forecast trends using historical data
-
-    CRITICAL: Always cite sources like [Source: stars_performance, contract=H1234]
+    - Compare to benchmarks
+    - Forecast trends
+    
+    CRITICAL: Always cite sources like [Source: stars_performance, measure=CBP]
     """,
-    tools=[query_stars_performance, compute_star_gap, query_benchmark_comparison, forecast_star_trend],
+    tools=[query_stars_performance, compute_star_gap, query_benchmark_comparison, forecast_star_trend]
 )

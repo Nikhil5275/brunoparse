@@ -1,6 +1,8 @@
 """Performance Pod Tools - Person 2"""
 from google.cloud import bigquery
-from config.settings import PROJECT_ID, BQ_DATASET
+import os
+PROJECT_ID = os.getenv("GOOGLE_CLOUD_PROJECT", "qwiklabs-gcp-00-43ecffa89f51") 
+BQ_DATASET = "humana_hackathon"
 
 client = bigquery.Client(project=PROJECT_ID)
 

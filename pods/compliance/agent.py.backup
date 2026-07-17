@@ -4,6 +4,7 @@ from .tools import cross_check_citations
 
 compliance_pod = Agent(
     name="CompliancePod",
+    #model="gemini-2.0-flash",
     instruction="""
     You are the Compliance & Evidence Pod.
 
@@ -16,3 +17,5 @@ compliance_pod = Agent(
     """,
     tools=[cross_check_citations]
 )
+
+root_agent = compliance_pod

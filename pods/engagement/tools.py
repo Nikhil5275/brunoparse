@@ -1,6 +1,8 @@
 """Engagement Pod Tools - Person 3"""
 from google.cloud import bigquery
-from config.settings import PROJECT_ID, BQ_DATASET
+import os
+PROJECT_ID = os.getenv("GOOGLE_CLOUD_PROJECT", "qwiklabs-gcp-00-43ecffa89f51") 
+BQ_DATASET = "humana_hackathon"
 
 client = bigquery.Client(project=PROJECT_ID)
 
@@ -12,8 +14,19 @@ def query_member_segments(
     """
     Query member segments with GROUP BY.
     """
+    # Map requested dimensions to actual column names
+    dimension_map = {
+        'age_group': 'age_band',
+        'age': 'age_band',
+        'region': 'gender',
+        'geography': 'gender'
+    }
 
-    dimension_cols = ", ".join(dimensions)
+    # Translate dimensions
+    actual_dimensions = [dimension_map.get(dim, dim) for dim in dimensions]
+    dimension_cols = ", ".join(actual_dimensions)
+
+    # (already set above) dimension_cols = ", ".join(dimensions)
 
     plan_filter = ""
     if plan_type:

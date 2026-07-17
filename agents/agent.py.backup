@@ -7,8 +7,8 @@ import json
 import asyncio
 from typing import List, Dict
 
-from .router import router_agent
-from .synthesizer import synthesizer_agent
+from agents.router import router_agent
+from agents.synthesizer import synthesizer_agent
 from pods.performance.agent import performance_pod
 from pods.engagement.agent import engagement_pod
 from pods.clinical.agent import clinical_pod
@@ -60,7 +60,7 @@ def orchestrate_query(user_question: str) -> str:
         pods_to_call = routing_data.get("pods", [])
     except json.JSONDecodeError:
         # Fallback: call all pods except compliance
-        pods_to_call = ["Performance", "Engagement", "Clinical", "Compliance"]
+        pods_to_call = ["Performance", "Engagement", "Clinical"]
 
     print(f"✅ Routing: {pods_to_call}")
 
@@ -107,7 +107,7 @@ def orchestrate_query(user_question: str) -> str:
     print("✅ Synthesis complete")
 
     # Step 4: Compliance validation with retry loop
-    print("🛡️  Step 4: Running compliance validation with retry...\n")
+    print("🛡️  Running compliance validation with retry...\n")
 
     max_retries = 3
     compliance_passed = False
@@ -139,18 +139,18 @@ def orchestrate_query(user_question: str) -> str:
                     fix_result = synthesizer_agent.run(
                         f"""Fix these compliance issues in the response below:
 
-    COMPLIANCE ISSUES:
-    {compliance_result.output}
+COMPLIANCE ISSUES:
+{compliance_result.output}
 
-    ORIGINAL RESPONSE:
-    {final_response}
+ORIGINAL RESPONSE:
+{final_response}
 
-    Instructions:
-    - Add missing citations if needed
-    - Remove any PII (member IDs, names, etc.)
-    - Maintain all factual content
-    - Keep professional formatting
-    """
+Instructions:
+- Add missing citations if needed
+- Remove any PII (member IDs, names, etc.)
+- Maintain all factual content
+- Keep professional formatting
+"""
                     )
                     final_response = fix_result.output
                     print(f"   ✅ Response regenerated\n")
@@ -164,14 +164,14 @@ def orchestrate_query(user_question: str) -> str:
         print(f"⚠️  COMPLIANCE FAILED after {max_retries} attempts\n")
         final_response = f"""⚠️ **COMPLIANCE WARNING**
 
-    This response failed compliance validation after {max_retries} attempts.
-    Issues detected: {compliance_result.output}
+This response failed compliance validation after {max_retries} attempts.
+Issues detected: {compliance_result.output}
 
-    Please review the information below carefully and verify any claims independently.
+Please review the information below carefully and verify any claims independently.
 
-    ---
+---
 
-    {final_response}"""
+{final_response}"""
     else:
         print("✅ Response approved by compliance\n")
 
@@ -202,6 +202,7 @@ root_agent = Agent(
     - Clear, executive-level summaries
 
     You have access to the orchestrate_query function to handle this workflow.
+    Use it for every user query about HEDIS/STARs performance.
     """,
     tools=[orchestrate_query]
 )

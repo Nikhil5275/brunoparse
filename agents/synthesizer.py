@@ -5,7 +5,7 @@ from google.adk import Agent
 
 synthesizer_agent = Agent(
     name="Synthesizer",
-    model="gemini-2.5-pro",
+    #model="gemini-2.5-pro",
     instruction="""
     You are the Synthesizer for the STARs RAG Agent system.
 

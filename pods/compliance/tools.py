@@ -7,6 +7,10 @@ import re
 
 from typing import Any
 
+import os
+PROJECT_ID = os.getenv("GOOGLE_CLOUD_PROJECT", "qwiklabs-gcp-00-43ecffa89f51") 
+BQ_DATASET = "humana_hackathon"
+
 
 
 
